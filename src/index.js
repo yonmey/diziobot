@@ -5,6 +5,7 @@ import request from 'request';
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ITA = 'ita';
 const SPA = 'spa';
+const useInst = `Utilización:\n - \`spa palabra_en_español\` (para traducir del español al italiano)\n - \`ita palabra_en_italiano\` (para traducir del italiano al español)`;
 
 const getWordFromQuery = query => query.replace(/^\w+\s/, '');
 
@@ -16,7 +17,7 @@ const getWordUrl = (isoA3, word) => {
   return `http://www.grandidizionari.it/Dizionario_Spagnolo-Italiano/parola/${word.substring(0, 1).toUpperCase()}/${word}.aspx?query=${word}`;
 }
 
-bot.start(ctx => ctx.replyWithMarkdown(`Bienvenid@s`));
+bot.start(ctx => ctx.replyWithMarkdown(useInst));
 
 bot.use(ctx => {
   if (ctx.message) {
@@ -26,15 +27,13 @@ bot.use(ctx => {
     console.log(`${new Date()}\n${query}`);
 
     if (![ITA, SPA].includes(isoA3)) {
-      // Todo: add message to follow the instructions
+      ctx.replyWithMarkdown(useInst);
       return;
     }
 
-    // predict the translation URL
     const word = getWordFromQuery(query);
     const url = getWordUrl(isoA3, word);
     
-    // fetch data and cleanup
     request({
       url,
       headers: {
