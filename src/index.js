@@ -10,13 +10,11 @@ const useInst = `Utilización:\n - Para traducir del Español al Italiano escrib
 const getWordFromQuery = query => query.replace(/^\w+\s/, '');
 
 const getWordUrl = (isoA3, word) => {
-  if (isoA3 === ITA) {
-    return `http://www.grandidizionari.it/Dizionario_Italiano-Spagnolo/parola/${word.substring(0, 1).toUpperCase()}/${word}.aspx?query=${word}`;
+  let sense = 'esit'
+  if (isoA3 === ITA) sense = 'ites';  
+  return `http://www.wordreference.com/${sense}/${word}`;
   }
   
-  return `http://www.grandidizionari.it/Dizionario_Spagnolo-Italiano/parola/${word.substring(0, 1).toUpperCase()}/${word}.aspx?query=${word}`;
-}
-
 bot.start(ctx => ctx.replyWithMarkdown(useInst));
 
 bot.use(ctx => {
@@ -38,24 +36,21 @@ bot.use(ctx => {
       }
     }, (err, res, body) => {
         const $ = cheerio.load(body);
-        const mainWord = $('.lemma').text();
-        const desc = $('desc').text();
+        const mainWord = $('.hwblk').first().text();
+        const type = $('.gramcat .pos').first().text();
         const meanings = [];
 
-        $('accezione').each((i, def) => {
+        $('.senses').first().find('.sense').each((i, def) => {
           const cleaned = $(def)
             .text()
-            .trim()
-            .replace(/\n/, ' ')
-            .replace(/\s+/, ' ')
-            .replace(/(^\d+\s)/, '\`$1- \`');
+            .trim();
 
-          meanings.push(cleaned);
+          meanings.push(`\`${i + 1} - \`${cleaned}`);
         });
 
         if (!meanings.length) return ctx.reply('No se encontró ningún resultado.');
 
-        ctx.replyWithMarkdown(`*${mainWord}*\n${desc}\n${meanings.join('\n')}`);
+        ctx.replyWithMarkdown(`*${mainWord}*\n_${type}_\n\n${meanings.join('\n')}`);
       }
     );
   }
