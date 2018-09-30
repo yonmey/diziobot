@@ -24,7 +24,10 @@ bot.use(ctx => {
 
     console.log(`${new Date()}\n${query}`);
 
-    if (![ITA, SPA].includes(isoA3)) return ctx.replyWithMarkdown(useInst);
+    if (![ITA, SPA].includes(isoA3)) {
+      ctx.replyWithMarkdown(useInst);
+      return;
+    }
 
     const word = getWordFromQuery(query);
     const url = getWordUrl(isoA3, word);
@@ -45,7 +48,7 @@ bot.use(ctx => {
           meanings.push(`\`${i + 1} - \`${cleaned}`);
         });
 
-        if (!meanings.length) return ctx.reply('No se encontró ningún resultado.');
+        if (!meanings.length) return;
 
         ctx.replyWithMarkdown(`*${mainWord}*\n_${type}_\n\n${meanings.join('\n')}`);
       }
