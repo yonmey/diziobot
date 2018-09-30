@@ -98,7 +98,7 @@ const getWordFromQuery = query => query.replace(/^\w+\s/, '');
 const getWordUrl = (isoA3, word) => {
   let sense = 'esit';
   if (isoA3 === ITA) sense = 'ites';
-  return `http://www.wordreference.com/${sense}/${word}`;
+  return `https://www.wordreference.com/${sense}/${word}`;
 };
 
 bot.start(ctx => ctx.replyWithMarkdown(useInst));
