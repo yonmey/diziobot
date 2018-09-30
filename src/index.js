@@ -35,6 +35,8 @@ bot.use(ctx => {
         'User-Agent': 'request'
       }
     }, (err, res, body) => {
+        console.log(res.statusCode, res. statusMessage);
+        if (err) console.log(err);
         const $ = cheerio.load(body);
         const mainWord = $('.hwblk').first().text();
         const type = $('.gramcat .pos').first().text();
