@@ -91,7 +91,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 const bot = new __WEBPACK_IMPORTED_MODULE_0_telegraf___default.a(process.env.BOT_TOKEN);
 const ITA = 'ita';
 const SPA = 'spa';
-const useInst = `Utilización:\n - \`spa palabra_en_español\` (para traducir del español al italiano)\n - \`ita palabra_en_italiano\` (para traducir del italiano al español)`;
+const useInst = `Utilización:\n - Para traducir del Español al Italiano escribe: \`spa palabra_en_español\`\n - Para traducir del Italiano al Español escribe: \`ita palabra_en_italiano\``;
 
 const getWordFromQuery = query => query.replace(/^\w+\s/, '');
 
