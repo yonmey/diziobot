@@ -29,12 +29,7 @@ bot.use(ctx => {
     const word = getWordFromQuery(query);
     const url = getWordUrl(isoA3, word);
     
-    request({
-      url,
-      headers: {
-        'User-Agent': 'request'
-      }
-    }, (err, res, body) => {
+    request(url, (err, res, body) => {
         console.log(res.statusCode, res. statusMessage);
         if (err) console.log(err);
         const $ = cheerio.load(body);
