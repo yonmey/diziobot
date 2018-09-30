@@ -115,12 +115,9 @@ bot.use(ctx => {
     const word = getWordFromQuery(query);
     const url = getWordUrl(isoA3, word);
 
-    __WEBPACK_IMPORTED_MODULE_2_request___default()({
-      url,
-      headers: {
-        'User-Agent': 'request'
-      }
-    }, (err, res, body) => {
+    __WEBPACK_IMPORTED_MODULE_2_request___default()(url, (err, res, body) => {
+      console.log(res.statusCode, res.statusMessage);
+      if (err) console.log(err);
       const $ = __WEBPACK_IMPORTED_MODULE_1_cheerio___default.a.load(body);
       const mainWord = $('.hwblk').first().text();
       const type = $('.gramcat .pos').first().text();
