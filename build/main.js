@@ -137,6 +137,8 @@ bot.use(ctx => {
         meanings.push(cleaned);
       });
 
+      if (!meanings.length) return;
+
       ctx.replyWithMarkdown(`*${mainWord}*\n${desc}\n${meanings.join('\n')}`);
     });
   }
