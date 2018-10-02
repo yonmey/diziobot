@@ -10,11 +10,11 @@ const useInst = `Utilización:\n - Para traducir del Español al Italiano escrib
 const getWordFromQuery = query => query.replace(/^\w+\s/, '');
 
 const getWordUrl = (isoA3, word) => {
-  let sense = 'esit'
-  if (isoA3 === ITA) sense = 'ites';  
+  let sense = 'esit';
+  if (isoA3 === ITA) sense = 'ites';
   return `https://www.wordreference.com/${sense}/${word}`;
-}
-  
+};
+
 bot.start(ctx => ctx.replyWithMarkdown(useInst));
 
 bot.use(ctx => {
@@ -31,26 +31,48 @@ bot.use(ctx => {
 
     const word = getWordFromQuery(query);
     const url = getWordUrl(isoA3, word);
-    
-    request(url, (err, res, body) => {
-        console.log(res.statusCode, res. statusMessage);
-        if (err) console.log(err);
+
+    request(
+      {
+        url,
+        headers: {
+          'User-Agent': 'request'
+        }
+      },
+      (err, res, body) => {
         const $ = cheerio.load(body);
-        const mainWord = $('.hwblk').first().text();
-        const type = $('.gramcat .pos').first().text();
+        const mainWord = $('.hwblk')
+          .first()
+          .text();
+        const type = $('.gramcat .pos')
+          .first()
+          .text();
         const meanings = [];
+        let meaning = [];
 
-        $('.senses').first().find('.sense').each((i, def) => {
-          const cleaned = $(def)
-            .text()
-            .trim();
+        $('.superentry').each((i, superEntry) => {
+          $(superEntry)
+            .find('.senses')
+            .first()
+            .find('.sense')
+            .each((i, def) => {
+              const cleaned = $(def)
+                .text()
+                .trim();
 
-          meanings.push(`\`${i + 1} - \`${cleaned}`);
+              meaning.push(`\`${i + 1} - \`${cleaned}`);
+            });
+          meanings.push(meaning.join('\n'));
+          meaning = [];
         });
 
         if (!meanings.length) return;
 
-        ctx.replyWithMarkdown(`*${mainWord}*\n_${type}_\n\n${meanings.join('\n')}`);
+        ctx.replyWithMarkdown(
+          `*${mainWord}*\n_${type}_\n\n${meanings.join(
+            '\n-----------------------------------------------------\n'
+          )}`
+        );
       }
     );
   }

@@ -118,23 +118,31 @@ bot.use(ctx => {
     const word = getWordFromQuery(query);
     const url = getWordUrl(isoA3, word);
 
-    __WEBPACK_IMPORTED_MODULE_2_request___default()(url, (err, res, body) => {
-      console.log(res.statusCode, res.statusMessage);
-      if (err) console.log(err);
+    __WEBPACK_IMPORTED_MODULE_2_request___default()({
+      url,
+      headers: {
+        'User-Agent': 'request'
+      }
+    }, (err, res, body) => {
       const $ = __WEBPACK_IMPORTED_MODULE_1_cheerio___default.a.load(body);
       const mainWord = $('.hwblk').first().text();
       const type = $('.gramcat .pos').first().text();
       const meanings = [];
+      let meaning = [];
 
-      $('.senses').first().find('.sense').each((i, def) => {
-        const cleaned = $(def).text().trim();
+      $('.superentry').each((i, superEntry) => {
+        $(superEntry).find('.senses').first().find('.sense').each((i, def) => {
+          const cleaned = $(def).text().trim();
 
-        meanings.push(`\`${i + 1} - \`${cleaned}`);
+          meaning.push(`\`${i + 1} - \`${cleaned}`);
+        });
+        meanings.push(meaning.join('\n'));
+        meaning = [];
       });
 
       if (!meanings.length) return;
 
-      ctx.replyWithMarkdown(`*${mainWord}*\n_${type}_\n\n${meanings.join('\n')}`);
+      ctx.replyWithMarkdown(`*${mainWord}*\n_${type}_\n\n${meanings.join('\n-----------------------------------------------------\n')}`);
     });
   }
 });
