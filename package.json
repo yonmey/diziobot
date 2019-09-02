@@ -1,0 +1,30 @@
+{
+	"name": "diziobot",
+	"version": "1.0.0",
+	"description": "A Telegram bot that translates from Spanish to Italian and viceversa.",
+	"main": "index.js",
+	"scripts": {
+		"dev": "backpack",
+		"build": "backpack build",
+		"start": "node build/main.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yonmey/diziobot.git"
+	},
+	"author": "yonmey",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/yonmey/diziobot/issues"
+	},
+	"homepage": "https://github.com/yonmey/diziobot#readme",
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.3",
+		"request": "^2.88.0",
+		"telegraf": "^3.32.0"
+	},
+	"devDependencies": {
+		"backpack-core": "^0.8.4"
+	}
+}
