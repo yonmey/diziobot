@@ -14,7 +14,7 @@ To translate a text from Italian to Spanish use:
 
 `ita word_to_translate` 🇮🇹 📖 🇪🇸
 
-### How does it translate the words?
+### How does it translates the words?
 The bot parses the `WordReference` website to find the results. The translation sense depends on the first keyword (`ita` or `spa`).
 
 ##### Used libraries
