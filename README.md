@@ -1,5 +1,5 @@
 # Diziobot 🤖 📖
-A Telegram bot who translates Spanish to Italian (and viceversa)
+A Telegram bot who translates from Spanish to Italian (and viceversa)
 
 ----
 
