@@ -79,3 +79,5 @@ bot.use(ctx => {
 });
 
 bot.startPolling();
+
+export default (req, res) => bot.handleUpdate(req.body, res);
