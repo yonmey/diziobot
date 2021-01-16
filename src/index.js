@@ -1,11 +1,11 @@
-import Telegraf from 'telegraf';
+import { Telegraf } from 'telegraf';
 import cheerio from 'cheerio';
 import request from 'request';
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const ITA = 'ita';
 const SPA = 'spa';
-const useInst = `Utilización:\n - Para traducir del Español al Italiano escribe: \`spa palabra_en_español\`\n - Para traducir del Italiano al Español escribe: \`ita palabra_en_italiano\``;
+const useInst = `Para traducir una palabra escribe:\n\`spa palabra_en_español\`\n\`ita palabra_en_italiano\`\n\nPer tradurre una parola:\n\`spa parola_in_spagnolo\`\n\`ita parola_in_italiano\``;
 
 const getWordFromQuery = query => query.replace(/^\w+\s/, '');
 
