@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   diziobot:
-    build: .
+    image: diziobot
     environment:
-      - TELEGRAM_BOT_TOKEN=
+      - TELEGRAM_BOT_TOKEN="651427524:AAENpPIol5SFK72uvxpeqKavk3XH3QF68AA"
     restart: always
