@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "backpack",
 		"build": "backpack build",
-		"start": "micro build/main.js",
+		"start": "node build/main.js",
 		"lint": "standard",
 		"lint:fix": "standard --fix"
 	},
