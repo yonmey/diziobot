@@ -18,13 +18,10 @@
 		"url": "https://github.com/yonmey/diziobot/issues"
 	},
 	"homepage": "https://github.com/yonmey/diziobot#readme",
-	"dependencies": {
-		"cheerio": "^1.0.0-rc.3",
-		"micro": "^9.3.4",
-		"request": "^2.88.0",
-		"telegraf": "^3.32.0"
-	},
 	"devDependencies": {
-		"backpack-core": "^0.8.4"
+		"backpack-core": "^0.8.4",
+		"cheerio": "^1.0.0-rc.5",
+		"request": "^2.88.0",
+		"telegraf": "^4.0.1"
 	}
 }
