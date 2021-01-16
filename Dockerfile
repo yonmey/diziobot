@@ -7,9 +7,7 @@ RUN git clone https://github.com/yonmey/diziobot
 
 WORKDIR /diziobot
 
-RUN cd diziobot && \
-    yarn install && \
+RUN yarn install && \
     yarn build
-
 
 ENTRYPOINT ["yarn", "start"]
