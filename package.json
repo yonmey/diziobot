@@ -6,7 +6,9 @@
 	"scripts": {
 		"dev": "backpack",
 		"build": "backpack build",
-		"start": "micro build/main.js"
+		"start": "micro build/main.js",
+		"lint": "standard",
+		"lint:fix": "standard --fix"
 	},
 	"repository": {
 		"type": "git",
@@ -19,9 +21,10 @@
 	},
 	"homepage": "https://github.com/yonmey/diziobot#readme",
 	"devDependencies": {
+		"axios": "^0.21.1",
 		"backpack-core": "^0.8.4",
 		"cheerio": "^1.0.0-rc.5",
-		"request": "^2.88.0",
+		"standard": "^16.0.3",
 		"telegraf": "^4.0.1"
 	}
 }
