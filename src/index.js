@@ -1,83 +1,39 @@
-import { Telegraf } from 'telegraf';
-import cheerio from 'cheerio';
-import request from 'request';
+import axios from 'axios'
+import { Telegraf } from 'telegraf'
+import { getTranslation } from './parser'
+import { formatTranslation, getWordFromQuery, getWordUrl } from './utils'
+import config from './config'
 
-const bot = new Telegraf(process.env.BOT_TOKEN);
-const ITA = 'ita';
-const SPA = 'spa';
-const useInst = `Para traducir una palabra escribe:\n\`spa palabra_en_español\`\n\`ita palabra_en_italiano\`\n\nPer tradurre una parola:\n\`spa parola_in_spagnolo\`\n\`ita parola_in_italiano\``;
+const bot = new Telegraf(process.env.BOT_TOKEN)
 
-const getWordFromQuery = query => query.replace(/^\w+\s/, '');
+bot.start(ctx => ctx.replyWithMarkdown(config.instructions))
 
-const getWordUrl = (isoA3, word) => {
-  let sense = 'esit';
-  if (isoA3 === ITA) sense = 'ites';
-  return `https://www.wordreference.com/${sense}/${word}`;
-};
-
-bot.start(ctx => ctx.replyWithMarkdown(useInst));
-
-bot.use(ctx => {
+bot.use(async ctx => {
   if (ctx.message) {
-    const query = ctx.message.text.toLowerCase();
-    const isoA3 = query.substring(0, 3);
+    const query = ctx.message.text.toLowerCase()
+    const isoA3 = query.substring(0, 3)
 
-    console.log(`${new Date()}\n${query}`);
+    console.log(`=-=-=-=-=-=-=\n${new Date()}\n${query}\n=-=-=-=-=-=-=\n`)
 
-    if (![ITA, SPA].includes(isoA3)) {
-      ctx.replyWithMarkdown(useInst);
-      return;
+    if (![config.itaISOA3, config.spaISOA3].includes(isoA3)) {
+      return ctx.replyWithMarkdown(config.instructions)
     }
 
-    const word = getWordFromQuery(query);
-    const url = getWordUrl(isoA3, word);
+    const word = getWordFromQuery(query)
+    const url = getWordUrl(isoA3, word)
+    const body = await axios.get(url)
 
-    request(
-      {
-        url,
-        headers: {
-          'User-Agent': 'request'
-        }
-      },
-      (err, res, body) => {
-        const $ = cheerio.load(body);
-        const mainWord = $('.hwblk')
-          .first()
-          .text();
-        const type = $('.gramcat .pos')
-          .first()
-          .text();
-        const meanings = [];
-        let meaning = [];
+    const translation = getTranslation(body.data)
+    if (!translation.meanings.length) {
+      return ctx.replyWithMarkdown(config.noResult)
+    };
 
-        $('.superentry').each((i, superEntry) => {
-          $(superEntry)
-            .find('.senses')
-            .first()
-            .find('.sense')
-            .each((i, def) => {
-              const cleaned = $(def)
-                .text()
-                .trim();
+    const result = formatTranslation(translation)
 
-              meaning.push(`\`${i + 1} - \`${cleaned}`);
-            });
-          meanings.push(meaning.join('\n'));
-          meaning = [];
-        });
-
-        if (!meanings.length) return;
-
-        ctx.replyWithMarkdown(
-          `*${mainWord}*\n_${type}_\n\n${meanings.join(
-            '\n-----------------------------------------------------\n'
-          )}`
-        );
-      }
-    );
+    ctx.replyWithMarkdown(result)
   }
-});
+})
 
-bot.startPolling();
+bot.startPolling()
 
-export default (req, res) => bot.handleUpdate(req.body, res);
+export default (req, res) => bot.handleUpdate(req.body, res)
