@@ -4,7 +4,7 @@ import { getTranslation } from './parser'
 import { formatTranslation, getWordFromQuery, getWordUrl } from './utils'
 import config from './config'
 
-const bot = new Telegraf(process.env.BOT_TOKEN)
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 
 bot.start(ctx => ctx.replyWithMarkdown(config.instructions))
 
